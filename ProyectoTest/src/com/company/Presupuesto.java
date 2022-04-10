@@ -1,20 +1,20 @@
 package com.company;
 public class Presupuesto {
-    float operacional;
-    float equipamiento;
-    float remuneracion;
+    double operacional;
+    double equipamiento;
+    double remuneracion;
 
-    public Presupuesto(float operacional, float equipamiento, float remuneracion) {
+    public Presupuesto(double operacional, double equipamiento, double remuneracion) {
         this.operacional = operacional;
         this.equipamiento = equipamiento;
         this.remuneracion = remuneracion;
     }
 
     public double total(){
-        return (this.operacional+this.equipamiento+this.remuneracion);
+        return (operacional+equipamiento+remuneracion);
     }
 
-    public float getOperacional() {
+    public double getOperacional() {
         return operacional;
     }
 
@@ -22,7 +22,7 @@ public class Presupuesto {
         this.operacional = operacional;
     }
 
-    public float getEquipamiento() {
+    public double getEquipamiento() {
         return equipamiento;
     }
 
@@ -30,7 +30,7 @@ public class Presupuesto {
         this.equipamiento = equipamiento;
     }
 
-    public float getRemuneracion() {
+    public double getRemuneracion() {
         return remuneracion;
     }
 
