@@ -3,15 +3,19 @@ public abstract class ProyectoAbs {
     private String titulo;
     private String resumen;
     private float duracion;
-    private float presupuesto;
+    private Presupuesto presupuesto;
     private boolean estado;
 
-    public ProyectoAbs(String titulo, String resumen, float duracion, float presupuesto, boolean estado) {
+    public ProyectoAbs(String titulo, String resumen, float duracion, Presupuesto presupuesto, boolean estado) {
         this.titulo = titulo;
         this.resumen = resumen;
         this.duracion = duracion;
         this.presupuesto = presupuesto;
         this.estado = estado;
+    }
+
+    public void getPresupuesto(){
+        System.out.println("El total del presupuesto es "+presupuesto.total());
     }
 
     public String getTitulo() {
@@ -38,11 +42,7 @@ public abstract class ProyectoAbs {
         this.duracion = duracion;
     }
 
-    public float getPresupuesto() {
-        return presupuesto;
-    }
-
-    public void setPresupuesto(float presupuesto) {
+    public void setPresupuesto(Presupuesto presupuesto) {
         this.presupuesto = presupuesto;
     }
 
