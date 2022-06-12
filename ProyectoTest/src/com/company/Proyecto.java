@@ -3,17 +3,17 @@ package com.company;
 import java.util.ArrayList;
 
 public class Proyecto {
-    private Presupuesto presupuesto;
+    private Presupuesto presupuesto = new Presupuesto();
     private String titulo; //listo
     private String resumen; //listo
     private double duracion; //listo
-    private int estado;
+    private boolean estado; //listo
     private int tipoProyecto; //listo
-    private ArrayList<Integrante> equipo; //listo
+    private ArrayList<Integrante> equipo = new ArrayList<>(); //listo
     private Integrante director; // listo
-    private String motivo;
+    private String motivo; //listo
 
-    public Proyecto(Presupuesto presupuesto, String titulo, String resumen, double duracion, int estado, int tipoProyecto, ArrayList<Integrante> equipo, Integrante director, String motivo) {
+    public Proyecto(Presupuesto presupuesto, String titulo, String resumen, double duracion, boolean estado, int tipoProyecto, ArrayList<Integrante> equipo, Integrante director, String motivo) {
         this.presupuesto = presupuesto;
         this.titulo = titulo;
         this.resumen = resumen;
@@ -30,12 +30,35 @@ public class Proyecto {
 
     }
 
+    public Proyecto(Presupuesto p1, String testAprobado, String s, double v, boolean b, int i, ArrayList<Integrante> equipo) {
+    }
+
     public Presupuesto getPresupuesto() {
         return presupuesto;
     }
 
-    public void setPresupuesto(Presupuesto presupuesto) {
-        this.presupuesto = presupuesto;
+    public void setPresupuesto(String presupuesto) {
+        String[] temp = presupuesto.split("-");
+        if(temp.length < 4){
+            try {
+                this.presupuesto.setOperacional(Double.parseDouble(temp[0]));
+                this.presupuesto.setEquipamiento(Double.parseDouble(temp[1]));
+                this.presupuesto.setRemuneracionT(Double.parseDouble(temp[2]));
+            } catch (Exception p){
+                System.out.println("Mal ingresado");
+            }
+        } else {
+            try {
+                this.presupuesto.setOperacional(Double.parseDouble(temp[0]));
+                this.presupuesto.setEquipamiento(Double.parseDouble(temp[1]));
+                this.presupuesto.setRemuneracionT(Double.parseDouble(temp[2]));
+                this.presupuesto.setViaticos(Double.parseDouble(temp[3]));
+                this.presupuesto.setViaje(Double.parseDouble(temp[4]));
+                this.presupuesto.setConferencia(Double.parseDouble(temp[5]));
+            } catch (Exception p){
+                System.out.println("Mal ingresado");
+            }
+        }
     }
 
     public String getTitulo() {
@@ -62,11 +85,11 @@ public class Proyecto {
         this.duracion = duracion;
     }
 
-    public int getEstado() {
+    public boolean isEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
 

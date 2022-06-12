@@ -1,139 +1,99 @@
 package com.company;
 
-import javax.print.event.PrintServiceAttributeListener;
+import com.google.gson.Gson;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Sistema {
-    private ArrayList<Proyecto> ingresados = new ArrayList<>();
-    private HashMap<String,Integrante> registrados = new HashMap<>();
-    private Input lector = new Input();
+    private final ArrayList<Proyecto> ingresados = new ArrayList<>();
+    private final HashMap<String,Integrante> registrados = new HashMap<>();
+
+    public void ingresoDeProyecto(String[] args) {
+        Proyecto temp = new Proyecto();
+        String[] partis = args[5].split("-");
+        Presupuesto tempPre = new Presupuesto();
+        Integrante pasar;
+        temp.setTitulo(args[1]);
+        temp.setResumen(args[2]);
+        try{
+            temp.setDuracion( Double.parseDouble( args[3] ) );
+        }catch (Exception e){
+            System.out.println("Error al ingresar los datos");
+        }
+        temp.setPresupuesto(args[4]);
 
 
-    private ArrayList ingresoParticipantes(){
-        ArrayList<Integrante> equipo = new ArrayList<>();
-        int opcion = 0;
-        int salir = 0;
-        Academico academicos;
-        Estudiante estudiantes;
-        String nombre;
-        String rut;
+        for (String parti : partis) {
+            String[] participante = parti.split(",");
 
-        System.out.println("Ingrese los integrantes del Proyecto: ");
-
-        do{
-            opcion = 0;
-            salir = 0;
-            do {
-                System.out.println("¿Que desea ingresar? ( Ingrese numeros del 1-5 )");
-                System.out.println("1. Academico          2. Academico (Media Jornada)");
-                System.out.println("3. Memorista          4. Practicante\n5. Academico");
-                opcion = lector.numerosEnteros();
-            } while( ! (opcion <= 4 && opcion >= 1) );
-
-            rut = lector.pedirString("Ingrese el Rut del participante");
-
-            if( ! (registrados.containsKey(rut) ) ) {
-                nombre = lector.pedirString("Ingrese el Nombre del participante");
-
-                if (opcion == 1 || opcion == 2) {
-                    academicos = new Academico(nombre, rut);
-                    if (opcion == 2) {
-                        academicos.mediaJornada();
+            if (!(registrados.containsKey(participante[1]))) {
+                switch (participante[0]) {
+                    case "Academico1" -> {
+                        pasar = new Academico(participante[1], participante[2]);
+                        temp.getEquipo().add(pasar);
+                        break;
                     }
-                    registrados.put(rut, academicos);
-                    equipo.add(academicos);
-                } else if (opcion == 3 || opcion == 4) {
-                    estudiantes = new Estudiante(nombre, rut);
-                    if (opcion == 4) {
-                        estudiantes.setPracticante();
+                    case "Academico2" -> {
+                        Academico academiTemp = new Academico(participante[1], participante[2]);
+                        academiTemp.mediaJornada();
+                        pasar = academiTemp;
+                        temp.getEquipo().add(pasar);
+                        break;
                     }
-                    registrados.put(rut, estudiantes);
-                    equipo.add(estudiantes);
+                    case "Administrativo" -> {
+                        pasar = new Administrativo(participante[1], participante[2]);
+                        temp.getEquipo().add(pasar);
+                    }
+                    case "Estudiante1" -> {
+                        pasar = new Estudiante(participante[1], participante[2]);
+                        temp.getEquipo().add(pasar);
+                        break;
+                    }
+                    case "Estudiante2" -> {
+                        Estudiante estuTempo = new Estudiante(participante[1], participante[2]);
+                        estuTempo.setPracticante();
+                        pasar = estuTempo;
+                        temp.getEquipo().add(pasar);
+                        break;
+                    }
+                }
+            } else {
+                for (String key : this.registrados.keySet()) {
+                    if (key.equals(participante[1])) {
+                        pasar = registrados.get(key);
+                        break;
+                    }
                 }
             }
-
-            do {
-                System.out.println("¿Desea seguir ingresando Integrates?\n1.Si\n2.No");
-                salir = lector.numerosEnteros();
-            }while ( ! (salir >= 1 && salir <= 2) );
-
-        } while (salir != 2);
-
-        return equipo;
-    }
-
-    private Integrante elegirDirector(ArrayList<Integrante> equipo){
-        System.out.println("¿Que integrante tendra el rol de director?");
-        int ciclos = 0;
-        int opciones = 0;
-        int eleccion = 0;
-        for(Integrante s: equipo){
-            if(opciones < 3) {
-                System.out.print(opciones + 1 + ")" + s.getNombre()+"      ");
-            } else {
-                ciclos = 0;
-                System.out.print(opciones + 1 + ")" + s.getNombre()+"\n");
-            }
-            opciones++;
         }
-        do{
-            eleccion = lector.numerosEnteros();
-        } while ( ! (eleccion >= 1 && eleccion <= opciones) );
+        System.out.println("Equipo Ingresado");
 
-        return equipo.get(eleccion);
-    }
+        temp.setDirector(registrados.get(args[6]));
 
-    public void ingreso(){
-        Proyecto protemp = new Proyecto();
-        Presupuesto preTemp = new Presupuesto();
-        Double tempDoubles = 0.0;
-        Integrante inteTemp;
-
-        int tipoPro = 0;
-
-        do {
-            System.out.println("¿Es un proyecto de invetigacion?\n1.Si\n2.No");
-            tipoPro = lector.numerosEnteros();
-        } while ( ! ( tipoPro >= 1 && tipoPro <= 2 ) );
-
-        protemp.setTitulo(lector.pedirString("Ingrese titulo del proyecto: "));
-
-        do{
-           System.out.println("Ingrese la duracion del proyecto en meses: ");
-           tempDoubles  = lector.pedirNumero();
-        } while ( ! ( tempDoubles > 1 ) );
-        protemp.setDuracion(tempDoubles);
-
-        preTemp.setOperacional(lector.pedirNumeroPositivo("Ingrese los gastos operacionales: "));
-        preTemp.setRemuneracionT(lector.pedirNumeroPositivo("Ingrese la remuneracion total: "));
-        preTemp.setEquipamiento(lector.pedirNumeroPositivo("Ingrese los gastos en equipamientos: "));
-        preTemp.setConferencia(lector.pedirNumeroPositivo("Ingrese el gasto de 1 conferencia: "));
-        preTemp.setViaje(lector.pedirNumeroPositivo("Ingrese el gato de los viajes: "));
-        preTemp.setViaticos(lector.pedirNumeroPositivo("Ingrese los gastos de viaticos: "));
-
-        if (tipoPro == 1){
-            protemp.setTipoProyecto(1);
+        if(!Boolean.parseBoolean(args[0])){
+            temp.setResumen(args[7]);
+            temp.setEstado(false);
         } else {
-            protemp.setTipoProyecto(2);
+            temp.setEstado(true);
         }
 
-        protemp.setPresupuesto(preTemp);
-
-        protemp.setResumen(lector.pedirString("Ingrese el resumen del proyecto: "));
-
-        protemp.setEquipo(ingresoParticipantes());
-
-        protemp.setDirector( elegirDirector( protemp.getEquipo() ) );
-
-
+        ingresados.add(temp);
     }
 
-    public ArrayList<Proyecto> getIngresados() {
-        return ingresados;
-    }
+    public void crearArchJS(){
+        try {
+            File archivo = new File("Proyectos.json");
+            Gson gson = new Gson();
+            String json = gson.toJson(this.ingresados);
+            FileWriter escribir = new FileWriter(archivo,true);
+            escribir.write(json);
+            escribir.close();
+        } catch (Exception e){
+            System.out.println("Error al escribir los archivos");
+        }
 
-    public void setIngresados(ArrayList<Proyecto> ingresados) {
-        this.ingresados = ingresados;
     }
 }
