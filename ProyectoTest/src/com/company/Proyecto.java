@@ -1,33 +1,23 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class Proyecto {
-    private Presupuesto presupuesto = new Presupuesto();
+    private Presupuesto presupuesto;
     private String titulo; //listo
     private String resumen; //listo
     private double duracion; //listo
     private boolean estado; //listo
     private int tipoProyecto; //listo
-    private ArrayList<Integrante> equipo = new ArrayList<>(); //listo
-    private Integrante director; // listo
+    private List<Integrante> equipo;
+    private String director; // listo
     private String motivo; //listo
 
-    public Proyecto(Presupuesto presupuesto, String titulo, String resumen, double duracion, boolean estado, int tipoProyecto, ArrayList<Integrante> equipo, Integrante director, String motivo) {
-        this.presupuesto = presupuesto;
-        this.titulo = titulo;
-        this.resumen = resumen;
-        this.duracion = duracion;
-        this.estado = estado;
-        this.tipoProyecto = tipoProyecto;
-        this.equipo = equipo;
-        this.director = director;
-        this.motivo = motivo;
-    }
-
-
     public Proyecto() {
-
+        this.presupuesto = new Presupuesto();
+        this.equipo = new ArrayList<>();
     }
 
     public Proyecto(Presupuesto p1, String testAprobado, String s, double v, boolean b, int i, ArrayList<Integrante> equipo) {
@@ -101,27 +91,31 @@ public class Proyecto {
         this.tipoProyecto = tipoProyecto;
     }
 
-    public ArrayList<Integrante> getEquipo() {
-        return equipo;
-    }
-
-    public void setEquipo(ArrayList<Integrante> equipo) {
-        this.equipo = equipo;
-    }
-
-    public Integrante getDirector() {
-        return director;
-    }
-
-    public void setDirector(Integrante director) {
-        this.director = director;
-    }
-
     public String getMotivo() {
         return motivo;
     }
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
+    }
+
+    public void setPresupuesto(Presupuesto presupuesto) {
+        this.presupuesto = presupuesto;
+    }
+
+    public void setDirector(String arg) {
+        this.director = arg;
+    }
+
+    public List<Integrante> getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(List<Integrante> equipo) {
+        this.equipo = equipo;
+    }
+
+    public String getDirector() {
+        return director;
     }
 }

@@ -1,15 +1,21 @@
 package com.company;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Sistema {
-    private final ArrayList<Proyecto> ingresados = new ArrayList<>();
-    private final HashMap<String,Integrante> registrados = new HashMap<>();
+    private ArrayList<Proyecto> ingresados;
+    private HashMap<String,Integrante> registrados ;
+
+    public Sistema() {
+        this.ingresados = new ArrayList<>();
+        this.registrados = new HashMap<>();
+    }
 
     public void ingresoDeProyecto(String[] args) {
         Proyecto temp = new Proyecto();
@@ -29,7 +35,7 @@ public class Sistema {
         for (String parti : partis) {
             String[] participante = parti.split(",");
 
-            if (!(registrados.containsKey(participante[1]))) {
+            if (!(this.registrados.containsKey(participante[1]))) {
                 switch (participante[0]) {
                     case "Academico1" -> {
                         pasar = new Academico(participante[1], participante[2]);
@@ -61,17 +67,12 @@ public class Sistema {
                     }
                 }
             } else {
-                for (String key : this.registrados.keySet()) {
-                    if (key.equals(participante[1])) {
-                        pasar = registrados.get(key);
-                        break;
-                    }
-                }
+                pasar = this.registrados.get(participante[1]);
             }
         }
         System.out.println("Equipo Ingresado");
 
-        temp.setDirector(registrados.get(args[6]));
+        temp.setDirector(args[6]);
 
         if(!Boolean.parseBoolean(args[0])){
             temp.setResumen(args[7]);
@@ -80,20 +81,35 @@ public class Sistema {
             temp.setEstado(true);
         }
 
-        ingresados.add(temp);
+        this.ingresados.add(temp);
     }
 
     public void crearArchJS(){
         try {
             File archivo = new File("Proyectos.json");
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(this.ingresados);
-            FileWriter escribir = new FileWriter(archivo,true);
+            FileWriter escribir = new FileWriter(archivo,false);
             escribir.write(json);
             escribir.close();
         } catch (Exception e){
             System.out.println("Error al escribir los archivos");
         }
+    }
 
+    public ArrayList<Proyecto> getIngresados() {
+        return ingresados;
+    }
+
+    public void setIngresados(ArrayList<Proyecto> ingresados) {
+        this.ingresados = ingresados;
+    }
+
+    public HashMap<String, Integrante> getRegistrados() {
+        return registrados;
+    }
+
+    public void setRegistrados(HashMap<String, Integrante> registrados) {
+        this.registrados = registrados;
     }
 }
